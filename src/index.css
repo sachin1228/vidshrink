@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+/*
+ * Palette extracted from getdesign.md (Geist type system, near-black surface
+ * stack, gray ramp #26262a → #b8b8bf, lime accent #ceff00).
+ */
+@theme {
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-page: #0a0a0b;
+  --color-panel: #101012;
+  --color-raised: #161618;
+  --color-raised2: #1d1d20;
+  --color-line: #232326;
+  --color-line2: #2b2b30;
+
+  --color-ink: #fffefb;
+  --color-soft: #b8b8bf;
+  --color-muted: #a0a0a8;
+  --color-subtle: #82828b;
+  --color-faint: #4d4d55;
+
+  --color-accent: #ceff00;
+  --color-accent-deep: #b8e600;
+  --color-accent-ink: #131400;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-page);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(206, 255, 0, 0.25);
+  color: var(--color-ink);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2b2b30 transparent;
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
