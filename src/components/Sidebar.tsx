@@ -1,4 +1,4 @@
-import { Clapperboard, Github, Linkedin, Twitter } from "lucide-react";
+import { Clapperboard, Github, Linkedin } from "lucide-react";
 
 function NavRow({
   icon,
@@ -59,24 +59,6 @@ export function Sidebar() {
       </nav>
 
       <div className="flex items-center gap-2 px-4 pb-4">
-        <a
-          aria-label="GitHub"
-          href="https://github.com/sachin1228/vidshrink"
-          target="_blank"
-          rel="noreferrer"
-          className="flex size-7 cursor-pointer items-center justify-center rounded-full bg-raised2 text-soft transition-colors hover:text-ink"
-        >
-          <Github size={13} />
-        </a>
-        <a
-          aria-label="X"
-          href="https://x.com/sachin1228"
-          target="_blank"
-          rel="noreferrer"
-          className="flex size-7 cursor-pointer items-center justify-center rounded-full bg-raised2 text-soft transition-colors hover:text-ink"
-        >
-          <Twitter size={13} />
-        </a>
         <a
           aria-label="LinkedIn"
           href="https://www.linkedin.com/in/sachin1228/"
