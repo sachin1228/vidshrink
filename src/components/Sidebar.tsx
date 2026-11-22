@@ -51,11 +51,6 @@ export function Sidebar() {
           label="Source on GitHub"
           href="https://github.com/sachin1228/vidshrink"
         />
-        <NavRow
-          icon={<Github size={16} />}
-          label="Free to use"
-          href="https://github.com/sachin1228/vidshrink/blob/main/LICENSE"
-        />
       </nav>
 
     </aside>
