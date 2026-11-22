@@ -1,12 +1,11 @@
 /**
- * Local-only feed-video compressor.
+ * Local-only video compressor.
  *
- * A port of the upload-time compression pipeline from UX Community
- * (github.com/sachin1228/uxcommunity, MIT): oversized clips are re-encoded to
- * a 1080p-class short side, a 30 fps cap and a ~3 Mbps target — visually
- * transparent at feed size, a fraction of the bytes. Small or already-lean
- * files are left untouched. Encoded with mediabunny + WebCodecs (H.264),
- * audio pinned to AAC so a conversion can never silently drop sound.
+ * Oversized clips are re-encoded to a 1080p-class short side, a 30 fps cap
+ * and a ~3 Mbps target — visually transparent at feed size, a fraction of
+ * the bytes. Small or already-lean files are left untouched. Encoded with
+ * mediabunny + WebCodecs (H.264), audio pinned to AAC so a conversion can
+ * never silently drop sound.
  */
 
 import {

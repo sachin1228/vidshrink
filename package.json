@@ -1,9 +1,9 @@
 {
-  "name": "shrink.md",
+  "name": "vidshrink",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Compress feed videos in your browser — 1080p, 30 fps, ~3 Mbps. No uploads, no server.",
+  "description": "Compress videos in your browser \u2014 1080p, 30 fps, ~3 Mbps. No uploads, no server.",
   "license": "MIT",
   "scripts": {
     "dev": "vite",

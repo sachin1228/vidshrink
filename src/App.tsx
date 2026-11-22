@@ -1,20 +1,14 @@
 import { useCallback, useRef, useState } from "react";
 import {
   ArrowRight,
-  ArrowUpRight,
   Check,
-  ChevronDown,
   Download,
   FileVideo,
   Github,
   Loader2,
-  MousePointerClick,
   Plus,
   ShieldCheck,
-  Sparkles,
   UploadCloud,
-  Wand2,
-  Zap,
 } from "lucide-react";
 import { Sidebar } from "./components/Sidebar";
 import { compressVideo, MAX_FRAME_RATE, TARGET_BITRATE, type Outcome } from "./lib/compress";
@@ -47,10 +41,7 @@ function download(file: File) {
   setTimeout(() => URL.revokeObjectURL(url), 10_000);
 }
 
-const HERO_PILLS = [
-  { label: "Single file", active: true },
-  { label: "Batch", active: false, soon: true },
-];
+const SPECS = `1080p · ${MAX_FRAME_RATE} fps · ~${(TARGET_BITRATE / 1_000_000).toFixed(0)} Mbps`;
 
 export function App() {
   const [phase, setPhase] = useState<Phase>({ kind: "idle" });
@@ -75,8 +66,7 @@ export function App() {
 
   const busy = phase.kind === "working";
   const outcome = phase.kind === "done" ? phase.outcome : null;
-  const pickedFile =
-    phase.kind === "picked" || phase.kind === "working" ? phase.file : null;
+  const pickedFile = phase.kind === "picked" || phase.kind === "working" ? phase.file : null;
 
   return (
     <div className="flex h-full">
@@ -86,22 +76,18 @@ export function App() {
         <header className="flex h-14 shrink-0 items-center justify-between gap-4 border-b border-line px-6">
           <div className="flex min-w-0 items-center gap-2 whitespace-nowrap text-sm">
             <span className="flex size-5 items-center justify-center rounded-md bg-accent text-[11px] font-bold text-accent-ink">
-              S
+              v
             </span>
-            <span className="font-medium text-ink">shrink.md</span>
-            <span className="text-faint">/</span>
-            <span className="hidden truncate text-muted sm:inline">Video Compressor</span>
-            <ChevronDown size={14} className="text-faint" />
+            <span className="font-medium text-ink">vidshrink</span>
           </div>
           <a
-            href="https://github.com/sachin1228/shrink.md"
+            href="https://github.com/sachin1228/vidshrink"
             target="_blank"
             rel="noreferrer"
             className="inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-line2 bg-raised px-3.5 py-1.5 text-[13px] font-medium text-ink transition-colors hover:bg-raised2"
           >
             <Github size={14} />
-            Star on GitHub
-            <ArrowUpRight size={13} className="text-subtle" />
+            GitHub
           </a>
         </header>
 
@@ -109,35 +95,12 @@ export function App() {
           <section className="pt-16 text-center">
             <h1 className="text-[clamp(34px,4.6vw,54px)] font-semibold leading-[1.05] tracking-[-0.035em]">
               Shrink{" "}
-              <span className="text-accent [text-shadow:0_0_36px_rgba(206,255,0,0.32)]">
-                videos
-              </span>{" "}
+              <span className="text-accent [text-shadow:0_0_36px_rgba(206,255,0,0.32)]">videos</span>{" "}
               for the feed.
             </h1>
-            <p className="mx-auto mt-5 max-w-[560px] text-[17px] leading-relaxed text-soft">
-              1080p · 30 fps · ~{(TARGET_BITRATE / 1_000_000).toFixed(0)} Mbps — visually identical
-              at feed size, 5–10× smaller. Nothing uploads: every byte stays on this device.
+            <p className="mx-auto mt-5 max-w-[440px] text-[16px] leading-relaxed text-soft">
+              {SPECS}. Nothing leaves your device.
             </p>
-
-            <div className="mt-8 flex items-center justify-center gap-2">
-              {HERO_PILLS.map((pill) => (
-                <span
-                  key={pill.label}
-                  className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-[13px] ${
-                    pill.active
-                      ? "border-line2 bg-raised text-ink"
-                      : "border-line bg-transparent text-subtle"
-                  }`}
-                >
-                  {pill.label}
-                  {pill.soon ? (
-                    <span className="rounded bg-raised2 px-1.5 py-px font-mono text-[9px] uppercase tracking-wide text-subtle">
-                      soon
-                    </span>
-                  ) : null}
-                </span>
-              ))}
-            </div>
           </section>
 
           <section
@@ -179,7 +142,7 @@ export function App() {
                   <p className="max-w-[420px] truncate text-[15px] font-medium">{pickedFile.name}</p>
                   <p className="font-mono text-[12px] text-subtle">
                     {formatBytes(pickedFile.size)}
-                    {phase.kind === "working" ? ` · compressing ${Math.round(phase.progress * 100)}%` : ""}
+                    {phase.kind === "working" ? ` · ${Math.round(phase.progress * 100)}%` : ""}
                   </p>
                   {phase.kind === "working" ? (
                     <div className="mt-1 h-1 w-[280px] overflow-hidden rounded-full bg-raised2">
@@ -188,9 +151,7 @@ export function App() {
                         style={{ width: `${Math.max(3, Math.round(phase.progress * 100))}%` }}
                       />
                     </div>
-                  ) : (
-                    <p className="text-[12px] text-faint">Drop another file, or click to replace</p>
-                  )}
+                  ) : null}
                 </>
               ) : (
                 <>
@@ -198,9 +159,10 @@ export function App() {
                     <UploadCloud size={22} />
                   </span>
                   <p className="text-[15px] text-soft">
-                    Drop a video here, or <span className="text-ink underline underline-offset-4">click to choose</span>
+                    Drop a video, or{" "}
+                    <span className="text-ink underline underline-offset-4">click to choose</span>
                   </p>
-                  <p className="font-mono text-[11.5px] text-faint">MP4 · MOV · WebM — processed locally</p>
+                  <p className="font-mono text-[11.5px] text-faint">MP4 · MOV · WebM</p>
                 </>
               )}
             </div>
@@ -214,13 +176,9 @@ export function App() {
               >
                 <Plus size={16} />
               </button>
-              <span className="inline-flex items-center gap-1.5 rounded-lg bg-raised px-2.5 py-1.5 text-[12.5px] text-ink">
-                <Sparkles size={13} className="text-accent" />
-                Feed preset
+              <span className="rounded-lg bg-raised px-2.5 py-1.5 font-mono text-[11.5px] text-subtle">
+                {SPECS}
               </span>
-              <span className="rounded-lg px-2 py-1.5 font-mono text-[11.5px] text-subtle">1080p</span>
-              <span className="rounded-lg px-2 py-1.5 font-mono text-[11.5px] text-subtle">{MAX_FRAME_RATE} fps</span>
-              <span className="rounded-lg px-2 py-1.5 font-mono text-[11.5px] text-subtle">~3 Mbps</span>
               <span className="ml-auto" />
               <button
                 type="button"
@@ -297,7 +255,9 @@ export function App() {
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="text-[14px] font-medium">
-                      {outcome.status === "already-small" ? "No compression needed" : "Couldn't compress this file"}
+                      {outcome.status === "already-small"
+                        ? "No compression needed"
+                        : "Couldn't compress this file"}
                     </p>
                     <p className="mt-0.5 text-[12px] leading-relaxed text-subtle">{outcome.reason}</p>
                   </div>
@@ -316,35 +276,17 @@ export function App() {
             </section>
           ) : null}
 
-          <section id="how" className="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3">
-            <span className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-faint">then</span>
-            <span className="inline-flex items-center gap-1.5 text-[13px] text-muted">
-              <MousePointerClick size={14} className="text-subtle" /> Pick a clip
-            </span>
-            <span className="inline-flex items-center gap-1.5 text-[13px] text-muted">
-              <Wand2 size={14} className="text-subtle" /> Compress locally
-            </span>
-            <span className="inline-flex items-center gap-1.5 text-[13px] text-muted">
-              <Download size={14} className="text-subtle" /> Download the file
-            </span>
-            <span className="inline-flex items-center gap-1.5 text-[13px] text-muted">
-              <Zap size={14} className="text-subtle" /> Powered by WebCodecs
-            </span>
-          </section>
-
-          <footer className="mt-14 text-center text-[12px] leading-relaxed text-faint">
-            Open source under the MIT license · Built with{" "}
+          <footer className="mt-14 text-center font-mono text-[11px] text-faint">
+            MIT ·{" "}
             <a
               href="https://mediabunny.dev"
               target="_blank"
               rel="noreferrer"
-              className="cursor-pointer text-subtle underline underline-offset-4 hover:text-soft"
+              className="cursor-pointer underline underline-offset-4 hover:text-subtle"
             >
               mediabunny
             </a>{" "}
-            and the browser's own encoders.
-            <br />
-            Your videos never touch a server — closing the tab ends the session.
+            + WebCodecs
           </footer>
         </div>
       </main>
