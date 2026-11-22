@@ -11,7 +11,7 @@ import {
   UploadCloud,
 } from "lucide-react";
 import { Sidebar } from "./components/Sidebar";
-import { compressVideo, MAX_FRAME_RATE, TARGET_BITRATE, type Outcome } from "./lib/compress";
+import { compressVideo, type Outcome } from "./lib/compress";
 
 type Phase =
   | { kind: "idle" }
@@ -27,7 +27,8 @@ export function formatBytes(bytes: number): string {
 
 function formatDuration(seconds: number): string {
   const total = Math.round(seconds);
-  return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
+  if (total < 60) return `${total} sec`;
+  return `${Math.floor(total / 60)} min ${total % 60} sec`;
 }
 
 function download(file: File) {
@@ -40,8 +41,6 @@ function download(file: File) {
   anchor.remove();
   setTimeout(() => URL.revokeObjectURL(url), 10_000);
 }
-
-const SPECS = `1080p · ${MAX_FRAME_RATE} fps · ~${(TARGET_BITRATE / 1_000_000).toFixed(0)} Mbps`;
 
 export function App() {
   const [phase, setPhase] = useState<Phase>({ kind: "idle" });
@@ -94,12 +93,11 @@ export function App() {
         <div className="mx-auto w-full max-w-[880px] px-8 pb-24">
           <section className="pt-16 text-center">
             <h1 className="text-[clamp(34px,4.6vw,54px)] font-semibold leading-[1.05] tracking-[-0.035em]">
-              Shrink{" "}
-              <span className="text-accent [text-shadow:0_0_36px_rgba(206,255,0,0.32)]">videos</span>{" "}
-              for the feed.
+              Make videos{" "}
+              <span className="text-accent [text-shadow:0_0_36px_rgba(206,255,0,0.32)]">smaller</span>.
             </h1>
             <p className="mx-auto mt-5 max-w-[440px] text-[16px] leading-relaxed text-soft">
-              {SPECS}. Nothing leaves your device.
+              Same look, much smaller file. Nothing leaves your device.
             </p>
           </section>
 
@@ -162,7 +160,7 @@ export function App() {
                     Drop a video, or{" "}
                     <span className="text-ink underline underline-offset-4">click to choose</span>
                   </p>
-                  <p className="font-mono text-[11.5px] text-faint">MP4 · MOV · WebM</p>
+                  <p className="text-[12px] text-faint">Any common video file works</p>
                 </>
               )}
             </div>
@@ -176,8 +174,8 @@ export function App() {
               >
                 <Plus size={16} />
               </button>
-              <span className="rounded-lg bg-raised px-2.5 py-1.5 font-mono text-[11.5px] text-subtle">
-                {SPECS}
+              <span className="rounded-lg bg-raised px-2.5 py-1.5 text-[12px] text-subtle">
+                Smaller file, same look
               </span>
               <span className="ml-auto" />
               <button
@@ -189,11 +187,11 @@ export function App() {
                 {busy ? (
                   <>
                     <Loader2 size={14} className="animate-spin" />
-                    Compressing
+                    Shrinking
                   </>
                 ) : (
                   <>
-                    Compress
+                    Shrink
                     <ArrowRight size={14} />
                   </>
                 )}
@@ -222,12 +220,10 @@ export function App() {
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-[14px] font-medium">{outcome.file.name}</p>
-                    <p className="mt-0.5 font-mono text-[11.5px] text-subtle">
+                    <p className="mt-0.5 text-[12px] text-subtle">
                       {formatBytes(outcome.original.size)} → {formatBytes(outcome.file.size)} ·{" "}
                       {Math.round((1 - outcome.file.size / outcome.original.size) * 100)}% smaller ·{" "}
-                      {outcome.outputInfo.width}×{outcome.outputInfo.height} ·{" "}
-                      {Math.round(outcome.outputInfo.frameRate)} fps ·{" "}
-                      {formatDuration(outcome.outputInfo.durationSeconds)}
+                      {formatDuration(outcome.outputInfo.durationSeconds)} long
                     </p>
                   </div>
                   <div className="flex items-center gap-2 sm:ml-auto sm:shrink-0">
@@ -256,8 +252,8 @@ export function App() {
                   <div className="min-w-0 flex-1">
                     <p className="text-[14px] font-medium">
                       {outcome.status === "already-small"
-                        ? "No compression needed"
-                        : "Couldn't compress this file"}
+                        ? "This one's already small"
+                        : "Couldn't shrink this video"}
                     </p>
                     <p className="mt-0.5 text-[12px] leading-relaxed text-subtle">{outcome.reason}</p>
                   </div>
@@ -276,17 +272,8 @@ export function App() {
             </section>
           ) : null}
 
-          <footer className="mt-14 text-center font-mono text-[11px] text-faint">
-            MIT ·{" "}
-            <a
-              href="https://mediabunny.dev"
-              target="_blank"
-              rel="noreferrer"
-              className="cursor-pointer underline underline-offset-4 hover:text-subtle"
-            >
-              mediabunny
-            </a>{" "}
-            + WebCodecs
+          <footer className="mt-14 text-center text-[11.5px] text-faint">
+            Free and open source. Your videos never leave your device.
           </footer>
         </div>
       </main>

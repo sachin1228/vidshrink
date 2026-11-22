@@ -1,16 +1,16 @@
 # vidshrink
 
-**Compress videos in your browser.** 1080p, 30 fps, ~3 Mbps — visually identical at feed size, 5–10× smaller. Nothing uploads.
+**Make videos smaller — right in your browser.** Same look, much smaller file. Nothing uploads.
 
-Open source, MIT. Built with [mediabunny](https://mediabunny.dev) and the browser's own codecs via WebCodecs.
+Free and open source.
 
-## How it works
+## What it does
 
-- **> 5 MB and > ~4 Mbps** → re-encoded to a 1080p-class short side, ≤ 30 fps, ~3 Mbps H.264 + AAC.
-- **Small or already lean** → left untouched — re-encoding would only lose quality.
-- **Any failure** → you keep the original file.
+- **Big videos get shrunk** into something easy to post, share or send.
+- **Small videos are left alone** — squeezing them further would only make them worse.
+- **If anything goes wrong**, you keep your original file.
 
-High-frame-rate sources are handled correctly: the encoder is told the source frame rate (capped at 30 fps), which keeps its per-frame bitrate budget honest.
+Everything happens on your device. There is no server, no account, and no upload.
 
 ## Run
 
@@ -19,8 +19,6 @@ npm install
 npm run dev       # http://localhost:5173
 npm run build     # static build in dist/
 ```
-
-Needs a Chromium-based browser or Safari 17+ for H.264 WebCodecs encoding. No server, no analytics, no network calls after load.
 
 ## License
 

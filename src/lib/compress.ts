@@ -87,7 +87,7 @@ export async function compressVideo(
   try {
     const videoTrack = await input.getPrimaryVideoTrack();
     if (!videoTrack) {
-      return { status: "unsupported", reason: "No video track found in this file.", original: file };
+      return { status: "unsupported", reason: "There's no video in this file.", original: file };
     }
     const info = await probeFile(file, videoTrack);
 
@@ -96,10 +96,7 @@ export async function compressVideo(
         status: "already-small",
         original: file,
         info,
-        reason:
-          info.durationSeconds > 0
-            ? "Already at or below the target bitrate — re-encoding would only lose quality."
-            : "Already small enough — nothing to do.",
+        reason: "Shrinking this would only make it worse — it's already a small file so we left it alone.",
       };
     }
 
@@ -107,7 +104,7 @@ export async function compressVideo(
       return {
         status: "unsupported",
         original: file,
-        reason: "This browser can't encode H.264 (WebCodecs). Try Chrome, Edge or Safari 17+.",
+        reason: "Your browser can't do this yet. Try Chrome, Edge, or the latest Safari.",
       };
     }
 
@@ -131,7 +128,7 @@ export async function compressVideo(
     });
 
     if (!conversion.isValid) {
-      return { status: "unsupported", original: file, reason: "This file can't be re-encoded here." };
+      return { status: "unsupported", original: file, reason: "We couldn't shrink this video." };
     }
     // Never ship a clip that silently lost its picture or its sound.
     if (
@@ -139,13 +136,13 @@ export async function compressVideo(
         (item) => item.track.type === "video" || item.track.type === "audio",
       )
     ) {
-      return { status: "unsupported", original: file, reason: "This file can't be re-encoded here." };
+      return { status: "unsupported", original: file, reason: "We couldn't shrink this video." };
     }
 
     if (onProgress) conversion.onProgress = (progress) => onProgress(progress);
     await conversion.execute();
     if (!output.target.buffer) {
-      return { status: "unsupported", original: file, reason: "The encode produced no output." };
+      return { status: "unsupported", original: file, reason: "Something went wrong — you're getting the original." };
     }
 
     const name = `${file.name.replace(/\.[^.]+$/, "")}-shrink.mp4`;
@@ -155,7 +152,7 @@ export async function compressVideo(
         status: "already-small",
         original: file,
         info,
-        reason: "Compression didn't make it smaller — keeping the original.",
+        reason: "Shrinking didn't help, so you're getting your original back.",
       };
     }
 
@@ -165,6 +162,6 @@ export async function compressVideo(
 
     return { status: "compressed", original: file, info, file: compressed, outputInfo };
   } catch {
-    return { status: "unsupported", original: file, reason: "Something went wrong while reading this file." };
+    return { status: "unsupported", original: file, reason: "Something went wrong — you're getting the original." };
   }
 }

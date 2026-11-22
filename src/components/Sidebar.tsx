@@ -45,7 +45,7 @@ export function Sidebar() {
       </div>
 
       <nav className="flex-1 overflow-y-auto px-2 py-3">
-        <NavRow icon={<Clapperboard size={16} />} label="Compressor" badge="New" active href="#tool" />
+        <NavRow icon={<Clapperboard size={16} />} label="Shrinker" badge="New" active href="#tool" />
         <NavRow
           icon={<Github size={16} />}
           label="Source on GitHub"
@@ -53,7 +53,7 @@ export function Sidebar() {
         />
         <NavRow
           icon={<Github size={16} />}
-          label="MIT license"
+          label="Free to use"
           href="https://github.com/sachin1228/vidshrink/blob/main/LICENSE"
         />
       </nav>
